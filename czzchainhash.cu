@@ -2,6 +2,8 @@
 #include "hash.h"
 #include "sha3.h"
 #include "cza.h"
+#include "czzchainhash.h"
+
 
 __device__ uint64_t gFoundIdx = uint64(-1);
 
@@ -178,10 +180,10 @@ __device__ int compare(uint8_t dgst[DGST_SIZE], uint8_t target[TARG_SIZE])
 }
 
 
-__global__ void compute(uint64 nonce_start)
+__global__ void compute(uint64_t nonce_start)
 {
 	uint8_t digs[DGST_SIZE];
-	const uint64 offset = gridDim.x * blockDim.x;
+	const uint64_t offset = gridDim.x * blockDim.x;
 	nonce_start += threadIdx.x + blockIdx.x * blockDim.x;
 	printf("CZZ from block %d, thread %d\n", blockIdx.x, threadIdx.x);
 	//printrf("blockIdx %d\n", blockIdx.x);
@@ -205,7 +207,7 @@ __global__ void compute(uint64 nonce_start)
 #endif
 }
 
-__device__ void fchainhash(uint64 nonce, uint8_t digs[DGST_SIZE])
+__device__ void fchainhash(uint64_t nonce, uint8_t digs[DGST_SIZE])
 {
 
 	uint8_t seed[64] = { 0 };
